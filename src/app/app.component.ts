@@ -5,6 +5,8 @@ import { SplashScreen } from '@ionic-native/splash-screen';
 
 import { HomePage } from '../pages/home/home';
 import { ListPage } from '../pages/list/list';
+import * as firebase from 'firebase';
+import { LoginPage } from '../pages/login/login';
 
 @Component({
   templateUrl: 'app.html'
@@ -14,10 +16,25 @@ export class MyApp {
 
   rootPage: any = HomePage;
 
+  
+
   pages: Array<{title: string, component: any}>;
 
   constructor(public platform: Platform, public statusBar: StatusBar, public splashScreen: SplashScreen) {
     this.initializeApp();
+
+    var that = this;
+    firebase.auth().onAuthStateChanged(function(user) {
+      if (user) {
+        // User is signed in.
+       that.rootPage = HomePage;
+        // ...
+      } else {
+        // User is signed out.
+        // ...
+        that.rootPage = LoginPage;
+      }
+    });
 
     // used for an example of ngFor and navigation
     this.pages = [
